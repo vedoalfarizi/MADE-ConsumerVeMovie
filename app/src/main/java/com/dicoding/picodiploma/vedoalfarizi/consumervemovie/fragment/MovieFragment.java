@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.dicoding.picodiploma.vedoalfarizi.consumervemovie.Provider.KEY_EXTRA_MOVIES;
-import static com.dicoding.picodiploma.vedoalfarizi.consumervemovie.Provider.LOADER;
+import static com.dicoding.picodiploma.vedoalfarizi.consumervemovie.Provider.LOADER_MOVIE;
 import static com.dicoding.picodiploma.vedoalfarizi.consumervemovie.Provider.URI_MOVIE;
 
 /**
@@ -76,14 +76,14 @@ public class MovieFragment extends Fragment {
         rvMovie.setLayoutManager(new LinearLayoutManager(getContext()));
         rvMovie.setAdapter(movieAdapter);
         pbData.setVisibility(View.VISIBLE);
-        getLoaderManager().initLoader(LOADER, null, cursorLoaderCallbacks);
+        getLoaderManager().initLoader(LOADER_MOVIE, null, cursorLoaderCallbacks);
     }
 
     private LoaderManager.LoaderCallbacks<Cursor> cursorLoaderCallbacks = new LoaderManager.LoaderCallbacks<Cursor>() {
         @NonNull
         @Override
         public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-            if(i == LOADER){
+            if(i == LOADER_MOVIE){
                 return new CursorLoader(Objects.requireNonNull(getContext()),
                         URI_MOVIE,
                         new String[]{"favorite_movies"},
@@ -94,14 +94,18 @@ public class MovieFragment extends Fragment {
 
         @Override
         public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
-            if(loader.getId() == LOADER){
-                ArrayList<Movie> movies = new ArrayList<>();
-                for(int i=0; i<cursor.getCount(); i++){
-                    cursor.moveToPosition(i);
-                    Movie movie = new Movie(cursor);
-                    movies.add(movie);
+            if(loader.getId() == LOADER_MOVIE){
+                if(cursor == null){
+                    movieAdapter.setMovies(null);
+                }else{
+                    ArrayList<Movie> movies = new ArrayList<>();
+                    for(int i=0; i<cursor.getCount(); i++){
+                        cursor.moveToPosition(i);
+                        Movie movie = new Movie(cursor);
+                        movies.add(movie);
+                    }
+                    movieAdapter.setMovies(movies);
                 }
-                movieAdapter.setMovies(movies);
                 rvMovie.setAdapter(movieAdapter);
                 pbData.setVisibility(View.INVISIBLE);
             }
@@ -109,7 +113,7 @@ public class MovieFragment extends Fragment {
 
         @Override
         public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-            if(loader.getId() == LOADER){
+            if(loader.getId() == LOADER_MOVIE){
                 movieAdapter.setMovies(null);
             }
         }

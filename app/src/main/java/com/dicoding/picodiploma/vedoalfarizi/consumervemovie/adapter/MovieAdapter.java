@@ -10,7 +10,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.dicoding.picodiploma.vedoalfarizi.consumervemovie.Provider;
 import com.dicoding.picodiploma.vedoalfarizi.consumervemovie.R;
 import com.dicoding.picodiploma.vedoalfarizi.consumervemovie.model.Movie;
 
@@ -29,10 +28,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void setMovies(ArrayList<Movie> movies) {
         this.movies = movies;
         notifyDataSetChanged();
-    }
-
-    public ArrayList<Movie> getMovies() {
-        return movies;
     }
 
     public void setOnItemClick(OnItemClick onItemClick){
@@ -71,7 +66,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        if(movies != null){
+            return movies.size();
+        }else{
+            return 0;
+        }
+
     }
 
     class MovieViewHolder extends RecyclerView.ViewHolder {

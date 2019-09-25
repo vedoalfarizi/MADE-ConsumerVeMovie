@@ -12,4 +12,5 @@
     <string name="premiere_date">Premiere Date</string>
     <string name="release_on">Release On</string>
     <string name="overview">Overview</string>
+    <string name="premiere_on">Premiere On</string>
 </resources>
